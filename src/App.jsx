@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import './App.css';
 
-// --- Componente de Rodapé ---
+
+
+function Header() {
+  return (
+    <header className='App-header'>
+      <h1>Meu Portfólio de Imagens</h1>
+      <p>Feito para aprender, por mim mesmo kkkkk</p>
+    </header>
+  );
+}
 function Footer() {
   return (
     <footer>
@@ -68,7 +77,7 @@ function InserirImagem({ tipoSelecionado }) {
           <button onClick={handleExibirClick}>Exibir Imagem</button>
         </div>
         <hr />
-        {/* A área de exibição da imagem */}
+
         {imagemExibida && (
           <div className="image-container">
             <h3>Sua imagem:</h3>
@@ -115,24 +124,20 @@ function InserirImagem({ tipoSelecionado }) {
 }
 
 
-// --- Componente Principal da Aplicação ---
+
 function App() {
   const [tipoDeUpload, setTipoDeUpload] = useState('link');
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Meu Portfólio de Imagens</h1>
-
+    <>
+    <Header></Header>
         <TipoDeSistema 
           tipoSelecionado={tipoDeUpload} 
           onTipoChange={setTipoDeUpload} 
         />
-        
         <InserirImagem tipoSelecionado={tipoDeUpload} />
-      </header>
       <Footer />
-    </div>
+      </>
   );
 }
 
