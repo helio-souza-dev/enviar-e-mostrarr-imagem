@@ -27,20 +27,32 @@ function TipoDeSistema({ tipoSelecionado, onTipoChange }) {
   );
 }
 
-// --- Componente para inserir a imagem ---
-// PONTO CRÍTICO 1: Verifique se o nome da função está escrito exatamente assim.
+
 function InserirImagem({ tipoSelecionado }) {
   const [imagemExibida, setImagemExibida] = useState('');
   const [urlInput, setUrlInput] = useState('');
 
+
   const handleExibirClick = () => {
     setImagemExibida(urlInput);
+  };
+
+  const handleImagemUploadPC = (evento) => {
+    const file = evento.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagemExibida(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleApagarClick = () => {
     setImagemExibida('');
     setUrlInput('');
   };
+
 
   if (tipoSelecionado === 'link') {
     return (
@@ -52,11 +64,11 @@ function InserirImagem({ tipoSelecionado }) {
             placeholder='https://exemplo.com/imagem.png'
             value={urlInput}
             onChange={(evento) => setUrlInput(evento.target.value)}
-          />
+          /><br /><br />
           <button onClick={handleExibirClick}>Exibir Imagem</button>
         </div>
         <hr />
-
+        {/* A área de exibição da imagem */}
         {imagemExibida && (
           <div className="image-container">
             <h3>Sua imagem:</h3>
@@ -75,29 +87,33 @@ function InserirImagem({ tipoSelecionado }) {
   }
 
   if (tipoSelecionado === 'pc') {
-    const [image, setImage] = useState(null);
-
-    const handleImagemUpload = (evento) => {
-      const file = evento.target.files[0];
-      if(file){
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          setImage(e.target.result);
-        }
-        reader.readAsDataURL(file);
-      }
-    }
     return (
       <div className="card">
         <h2>Upload do Computador</h2>
-        <p>Esta funcionalidade ainda está em construção!</p>
-        <input type="file" disabled />
+        <div className="input-group">
+          <input type="file" accept='image/*' onChange={handleImagemUploadPC} />
+        </div>
+        <hr />
+        {imagemExibida && (
+          <div className="image-container">
+            <h3>Sua imagem:</h3>
+            <img
+              className='imginsert'
+              src={imagemExibida}
+              alt="Imagem enviada pelo usuário"
+            /><br /><br />
+            <button onClick={handleApagarClick} className="delete-button">
+              Apagar Imagem
+            </button>
+          </div>
+        )}
       </div>
     );
   }
 
   return null;
 }
+
 
 // --- Componente Principal da Aplicação ---
 function App() {
@@ -113,7 +129,6 @@ function App() {
           onTipoChange={setTipoDeUpload} 
         />
         
-        {/* PONTO CRÍTICO 2: A chamada aqui deve ter o mesmo nome da função definida acima. */}
         <InserirImagem tipoSelecionado={tipoDeUpload} />
       </header>
       <Footer />
